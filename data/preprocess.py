@@ -2,6 +2,7 @@ import pandas as pd
 import json, re, os
 from tqdm import tqdm
 import spacy
+import emoji
 tqdm.pandas()
 
 nlp = spacy.load("en_core_web_sm", disable=["ner"])
@@ -9,10 +10,23 @@ nlp = spacy.load("en_core_web_sm", disable=["ner"])
 def clean_text(text):
     if not isinstance(text, str):
         return ""
+    # Eliminar URLs
     text = re.sub(r"https?://\S+|www\.\S+", "", text)
+    # Eliminar emojis (usando la librería emoji)
+    # Si no la tienes, instala con: pip install emoji
+    text = emoji.replace_emoji(text, replace="")
+    # Unificar contracciones eliminando comillas simples internas
+    # Ejemplo: don't -> dont, isn't -> isnt
+    text = re.sub(r"(\w)'(\w)", r"\1\2", text)
+    # Eliminar comillas simples o dobles restantes (no entre letras)
+    text = re.sub(r"['\"`´]", "", text)
+    # Eliminar cualquier carácter no alfabético (manteniendo espacios)
     text = re.sub(r"[^a-zA-Z\s]", " ", text)
+    # Pasar a minúsculas
     text = text.lower()
+    # Quitar espacios repetidos
     text = re.sub(r"\s+", " ", text).strip()
+
     return text
 
 def preprocess_text(text):
