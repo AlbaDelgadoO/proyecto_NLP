@@ -54,6 +54,18 @@ def main():
         df["lemmas"] = df["processed"].apply(lambda d: d["lemmas"])
         df.drop(columns=["processed"], inplace=True)
 
+        # Eliminar filas cuyo texto limpio esté vacío
+        df = df[df["text_clean"].str.strip() != ""]
+
+        # Eliminar filas que contengan emojis (por si alguno persiste)
+        # Crear un patrón de emojis basado en EMOJI_DATA
+        emoji_pattern = "[" + "".join(emoji.EMOJI_DATA.keys()) + "]"
+        df = df[~df["messages"].apply(lambda x: bool(re.search(emoji_pattern, str(x))))]
+
+
+        # Reiniciar índices después de filtrar
+        df.reset_index(drop=True, inplace=True)
+
         # Asegurar que las columnas de etiquetas sean strings
         for col in ["sender_labels", "receiver_labels"]:
             if col in df.columns:
