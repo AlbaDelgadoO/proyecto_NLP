@@ -1,3 +1,17 @@
 .pytest_cache/
 .DS_Store
 */__pycache__
+data/test.jsonl
+data/test.jsonl
+data/test.jsonl
+data/test_preprocessed.parquet
+data/train_preprocessed.parquet
+data/validation.jsonl
+diplomacy/models/embeddings/fasttext.model
+data/validation_preprocessed.parquet
+diplomacy/models/embeddings/fasttext.model.wv.vectors_ngrams.npy
+diplomacy/models/embeddings/word2vec.model
+diplomacy/models/representations/bow_vectorizer.joblib
+diplomacy/models/representations/tfidf_vectorizer.joblib
+diplomacy/models/representations/X_bow_train.npz
+diplomacy/models/representations/X_tfidf_train.npz
