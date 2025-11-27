@@ -23,7 +23,7 @@ def extract_bert_embeddings(model_name="bert-base-uncased", split="train"):
     model.to(device)
 
     # Cargamos los textos preprocesados
-    df = pd.read_parquet(f"data/{split}_preprocessed.parquet")
+    df = pd.read_parquet(f"data/train_preprocessed.parquet")
     texts = df["text_clean"].tolist()
 
     # Creamos la carpeta de salida para guardar los embeddings
