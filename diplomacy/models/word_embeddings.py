@@ -3,19 +3,19 @@ import ast
 from gensim.models import Word2Vec, FastText
 from pathlib import Path
 
-# Cargar tokens desde parquet
+# Cargamos los tokens desde parquet.
 def load_tokens(path):
     """
-    Carga la columna 'tokens' desde el parquet y devuelve
+    C¡¡Esta función carga la columna 'tokens' desde el parquet y devuelve
     una lista de listas de tokens.
     """
     df = pd.read_parquet(path)
     
-    # Si los tokens vienen como string, convertirlos a lista
+    # Si los tokens vienen como string, los convertimos a lista.
     if isinstance(df["tokens"].iloc[0], str):
         df["tokens"] = df["tokens"].apply(ast.literal_eval)
     
-    # Devolver listas de tokens no nulas
+    # Devolvemos listas de tokens no nulas.
     return df["tokens"].dropna().tolist()
 
 # Entrenamiento Word2Vec
@@ -27,10 +27,10 @@ def train_word2vec(train_path="data/train_preprocessed.parquet",
     """
     sentences = load_tokens(train_path)
 
-    # Crear carpeta si no existe
+    # Se crea la carpeta si no existe.
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
-    # Inicializar y entrenar Word2Vec
+    # Inicializamos y entrenamos Word2Vec:
     model = Word2Vec(
         sentences=sentences,
         vector_size=vector_size,
@@ -41,11 +41,11 @@ def train_word2vec(train_path="data/train_preprocessed.parquet",
         epochs=epochs
     )
 
-    # Guardar modelo
+    # Guardamos el modelo.
     model.save(output_path)
     print(f"Word2Vec entrenado y guardado en: {output_path}")
 
-# Entrenamiento FastText
+# Entrenamiento FastText:
 def train_fasttext(train_path="data/train_preprocessed.parquet",
                    output_path="diplomacy/models/embeddings/fasttext.model",
                    vector_size=200, window=5, min_count=3, workers=8, epochs=10):
@@ -54,10 +54,10 @@ def train_fasttext(train_path="data/train_preprocessed.parquet",
     """
     sentences = load_tokens(train_path)
 
-    # Crear carpeta si no existe
+    # Creamos la carpeta si no existe.
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
-    # Inicializar y entrenar FastText
+    # Inicializamos y entrenamos FastText:
     model = FastText(
         sentences=sentences,
         vector_size=vector_size,
@@ -67,12 +67,12 @@ def train_fasttext(train_path="data/train_preprocessed.parquet",
         epochs=epochs
     )
 
-    # Guardar modelo
+    # Guardamos el modelo.
     model.save(output_path)
     print(f"FastText entrenado y guardado en: {output_path}")
 
 if __name__ == "__main__":
-    # Entrenar Word2Vec
+    # Entrenamos Word2Vec.
     train_word2vec()
-    # Entrenar FastText
+    # Entrenamos FastText.
     train_fasttext()
